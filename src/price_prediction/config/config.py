@@ -3,28 +3,29 @@ from pathlib import Path
 from sklearn.dummy import DummyRegressor
 
 
-RANDOM_STATE = 147
-
+# Global config
 PROJECT_NAME = "price-prediction"
 PACKAGE_ROOT = Path(__file__).resolve().parent.parent
+RANDOM_STATE = 147
 
+# Path config
 DATA_PATH = PACKAGE_ROOT / "data"
 MODEL_PATH = PACKAGE_ROOT / "model"
 METRICS_PATH = PACKAGE_ROOT / "metrics"
 
-RAW_FILE = "" # Name of raw CSV dataset
+# Data ingestion config
+RAW_FILE = "car_price_prediction.csv"
 TRAIN_FILE = "train.csv"
-VALIDATION_FILE = "validation.csv"
+VAL_FILE = "validation.csv"
 TEST_FILE = "test.csv"
+VAL_SPLIT = 0.2
+TEST_SPLIT = 0.2
+TARGET = "Price"
 
-TARGET = "" # Used for supervised learning tasks
-
-NUMERICAL_FEATURES = []
-
-CATEGORICAL_FEATURES = [] # No implied ordering
-
+# Data pipeline config
+NUMERIC_FEATURES = []
+NOMINAL_FEATURES = [] # No implied ordering
 ORDINAL_FEATURES = [] # Implied ordering (e.g., High, Medium, Low)
-
 BINARY_FEATURES = [] # Binary (0/1) features
 
 # Temp variable used in train.py --> Adapt to ML project
