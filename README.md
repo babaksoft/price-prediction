@@ -13,7 +13,7 @@
 
 ## Dataset summary
 
-(TODO: Provide a quick introduction of dataset features and target in tabular markdown format)
+(TODO: Provide a quick introduction of dataset features and target in tabular Markdown format)
 
 ## Performance metric(s)
 
@@ -21,7 +21,7 @@
 
 ## Final model
 
-(TODO: Write a short paragraph about the final model, display overall metrics in tabular markdown format)
+(TODO: Write a short paragraph about the final model, display overall metrics in tabular Markdown format)
 
 ## Try it out!
 
