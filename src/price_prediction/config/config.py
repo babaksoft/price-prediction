@@ -24,10 +24,15 @@ TRAIN_VAL_SPLIT = 0.2
 TARGET = "Price"
 
 # Data pipeline config
-NUMERIC_FEATURES = []
-NOMINAL_FEATURES = [] # No implied ordering
-ORDINAL_FEATURES = [] # Implied ordering (e.g., High, Medium, Low)
-BINARY_FEATURES = [] # Binary (0/1) features
+NUM_FEATURES = ["Prod. year", "Cylinders", "Airbags"]
+CAT_FEATURES = [
+    "Doors", "Drive wheels", "Gear box type",
+    "Category", "Color", "Fuel type"
+]
+BIN_FEATURES = ["Leather interior", "Wheel"]
+ENC_FEATURES = [
+    "Levy", "Manufacturer", "Engine volume", "Mileage"
+] # Need custom encoding
 
 # Temp variable used in train.py --> Adapt to ML project
 BASELINE_MODEL = DummyRegressor(strategy="median")
