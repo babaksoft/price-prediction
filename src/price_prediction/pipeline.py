@@ -91,6 +91,10 @@ def build_pipeline() -> ColumnTransformer:
             feature_names_out="one-to-one"
         )),
         ("imputer", SimpleImputer(strategy="median")),
+        ("log_scaler", FunctionTransformer(
+            func=np.log1p,
+            feature_names_out="one-to-one"
+        )),
         ("scaler", StandardScaler())
     ])
     mileage_pipeline = Pipeline([
