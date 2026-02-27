@@ -145,13 +145,13 @@ def ingest(raw_path, to_dir):
 
 
 def main():
-    raw_path = Path(config.DATA_PATH) / "raw" / config.RAW_FILE
+    raw_path = Path(config.DATA_DIR) / "raw" / config.RAW_FILE
     if not os.path.exists(raw_path):
         raise FileNotFoundError(
             "Raw dataset not found. You may need to reinstall this package."
         )
 
-    to_dir = Path(config.DATA_PATH) / "prepared"
+    to_dir = Path(config.DATA_DIR) / "prepared"
     if not os.path.exists(to_dir):
         os.mkdir(to_dir)
     if os.path.exists(to_dir / config.TRAIN_FILE) or \

@@ -151,7 +151,7 @@ def build_pipeline() -> ColumnTransformer:
 
 
 def pipeline_smoke_test():
-    train_path = config.DATA_PATH / "prepared" / config.TRAIN_FILE
+    train_path = config.DATA_DIR / "prepared" / config.TRAIN_FILE
     df = pd.read_csv(train_path)
     x = df.drop(config.TARGET, axis=1)
     pipeline = build_pipeline()

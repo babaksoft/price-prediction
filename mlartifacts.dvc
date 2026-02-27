@@ -1,0 +1,6 @@
+outs:
+- md5: 498d69d17e9f283ef4bc14c29b07661c.dir
+  size: 35232
+  nfiles: 8
+  hash: md5
+  path: mlartifacts

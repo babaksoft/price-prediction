@@ -10,9 +10,10 @@ PACKAGE_ROOT = Path(__file__).resolve().parent.parent
 RANDOM_STATE = 147
 
 # Path config
-DATA_PATH = PACKAGE_ROOT / "data"
-MODEL_PATH = PACKAGE_ROOT / "model"
-METRICS_PATH = PACKAGE_ROOT / "metrics"
+ARTIFACTS_DIR = PACKAGE_ROOT / "artifacts"
+DATA_DIR = PACKAGE_ROOT / "data"
+MODEL_DIR = PACKAGE_ROOT / "model"
+METRICS_DIR = PACKAGE_ROOT / "metrics"
 
 # Data ingestion config
 RAW_FILE = "car_price_prediction.csv"
@@ -33,6 +34,19 @@ BIN_FEATURES = ["Leather interior", "Wheel"]
 ENC_FEATURES = [
     "Levy", "Manufacturer", "Engine volume", "Mileage"
 ] # Need custom encoding
+
+# Pipeline versioning config
+PIPELINE_STAGE = "preprocessing"
+PIPELINE_VERSION = "v1"
+FEATURE_SCHEMA_VERSION = "v1"
+DATA_VERSION = "dvc_v2"
+DATA_COMMIT_HASH = "b4b6bb2b"
+CODE_COMMIT_HASH = "692fb90a"
+TARGET_TRANSFORM = "log"
+MILEAGE_TRANSFORM = "log1p"
+LEVY_TRANSFORM = "none"
+ENGINE_VOLUME_SPLIT = "yes"
+PIPELINE_STATUS = "locked"
 
 # Temp variable used in train.py --> Adapt to ML project
 BASELINE_MODEL = DummyRegressor(strategy="median")
