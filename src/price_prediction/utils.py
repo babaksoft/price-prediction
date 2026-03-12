@@ -1,4 +1,5 @@
 import os
+from typing import Any
 from datetime import datetime
 from pathlib import Path
 
@@ -35,23 +36,21 @@ def get_data(split_name: str = "train"):
     return x, y
 
 
-def evaluate_model(model, run_name, model_name=None):
+def evaluate_model(run_name, model, params: dict[str, Any] = None):
     with mlflow.start_run(run_name=run_name) as run:
         mlflow.set_tag("run_id", run.info.run_id)
-
-        if not model_name:
-            model_name = type(model).__name__
-        x, y = get_data()
-        cv = KFold(
-            n_splits=10, shuffle=True,
-            random_state=config.RANDOM_STATE
-        )
 
         transformer = build_pipeline()
         pipeline = Pipeline([
             ("transformer", transformer),
             ("estimator", model)
         ])
+
+        x, y = get_data()
+        cv = KFold(
+            n_splits=10, shuffle=True,
+            random_state=config.RANDOM_STATE
+        )
 
         start = datetime.now()
         scoring = "neg_mean_absolute_error"
@@ -63,14 +62,21 @@ def evaluate_model(model, run_name, model_name=None):
             "cv_score_mean": round(scores.mean(), 4),
             "cv_score_std": round(scores.std(), 4)
         }
+
         cv_params = {
-            "model_type": model_name,
+            "model_type": type(model).__name__
+        }
+        if params:
+            cv_params.update({
+                f"model_{key}": value for key, value in params.items()
+            })
+        cv_params.update({
             "cv_scoring": scoring,
             "cv_splits": 10,
             "cv_shuffle": True,
             "cv_random_state": config.RANDOM_STATE,
             "cv_duration": str(end - start)
-        }
+        })
 
         mlflow.log_metrics(metrics)
         mlflow.log_params(cv_params)
