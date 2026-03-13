@@ -1,7 +1,5 @@
 from pathlib import Path
 
-from sklearn.dummy import DummyRegressor
-
 
 # Global config
 PROJECT_NAME = "price-prediction"
@@ -36,16 +34,13 @@ ENC_FEATURES = ["Levy", "Engine volume", "Mileage"] # Need custom encoding
 
 # Pipeline versioning config
 PIPELINE_STAGE = "preprocessing"
-PIPELINE_VERSION = "v2"
-FEATURE_SCHEMA_VERSION = "v1"
+PIPELINE_VERSION = "v3"
+FEATURE_SCHEMA_VERSION = "v2"
 DATA_VERSION = "dvc_v2"
 DATA_COMMIT_HASH = "b4b6bb2b"
-CODE_COMMIT_HASH = "8800ee00"
+CODE_COMMIT_HASH = "9c0cb525"
 TARGET_TRANSFORM = "log"
 MILEAGE_TRANSFORM = "log1p"
 LEVY_TRANSFORM = "log1p"
 ENGINE_VOLUME_SPLIT = "yes"
 PIPELINE_STATUS = "locked"
-
-# Temp variable used in train.py --> Adapt to ML project
-BASELINE_MODEL = DummyRegressor(strategy="median")

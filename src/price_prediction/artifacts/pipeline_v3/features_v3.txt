@@ -1,0 +1,54 @@
+cat__Doors_02-Mar
+cat__Doors_04-May
+cat__Doors_>5
+cat__Drive wheels_4x4
+cat__Drive wheels_Front
+cat__Drive wheels_Rear
+cat__Gear box type_Automatic
+cat__Gear box type_Manual
+cat__Gear box type_Tiptronic
+cat__Gear box type_Variator
+cat__Category_Cabriolet
+cat__Category_Coupe
+cat__Category_Goods wagon
+cat__Category_Hatchback
+cat__Category_Jeep
+cat__Category_Limousine
+cat__Category_Microbus
+cat__Category_Minivan
+cat__Category_Pickup
+cat__Category_Sedan
+cat__Category_Universal
+cat__Color_Beige
+cat__Color_Black
+cat__Color_Blue
+cat__Color_Brown
+cat__Color_Carnelian red
+cat__Color_Golden
+cat__Color_Green
+cat__Color_Grey
+cat__Color_Orange
+cat__Color_Pink
+cat__Color_Purple
+cat__Color_Red
+cat__Color_Silver
+cat__Color_Sky blue
+cat__Color_White
+cat__Color_Yellow
+cat__Fuel type_CNG
+cat__Fuel type_Diesel
+cat__Fuel type_Hybrid
+cat__Fuel type_LPG
+cat__Fuel type_Petrol
+cat__Fuel type_Plug-in Hybrid
+high_cat__Manufacturer
+high_cat__Model
+num__Prod. year
+num__Cylinders
+num__Airbags
+bin__Leather interior_Yes
+bin__Wheel_Right-hand drive
+levy__Levy
+mileage__Mileage
+volume__engine__Engine volume
+volume__turbo__Turbo

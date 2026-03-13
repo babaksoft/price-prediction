@@ -74,7 +74,8 @@ def mlflow_register():
         train_path = config.DATA_DIR / "prepared" / config.TRAIN_FILE
         df_train = pd.read_csv(train_path)
         x_train = df_train.drop(config.TARGET, axis=1)
-        pipeline = build_pipeline().fit(x_train)
+        y_train = df_train[config.TARGET]
+        pipeline = build_pipeline().fit(x_train, y_train)
         set_version_artifacts(pipeline)
 
 
