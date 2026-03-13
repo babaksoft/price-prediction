@@ -1,6 +1,6 @@
-model,cv_score_mean,cv_score_std
-RF,0.3062,0.011
-HGB,0.3073,0.0128
-XGB,0.3192,0.0139
-LGBM,0.3082,0.0118
-KNN,0.3727,0.0119
+model,cv_score_mean,cv_score_std,cv_mae_percent
+RF,0.297,0.0126,34.58
+HGB,0.3008,0.0132,35.09
+XGB,0.3132,0.0165,36.77
+LGBM,0.3021,0.0138,35.26
+KNN,0.3723,0.0146,45.11
