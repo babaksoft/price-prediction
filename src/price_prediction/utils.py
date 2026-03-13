@@ -58,9 +58,11 @@ def evaluate_model(run_name, model, params: dict[str, Any] = None):
             pipeline, x, y, scoring=scoring, cv=cv, n_jobs=-1)
         end = datetime.now()
 
+        mae_mean = scores.mean()
         metrics = {
-            "cv_score_mean": round(scores.mean(), 4),
-            "cv_score_std": round(scores.std(), 4)
+            "cv_score_mean": round(mae_mean, 4),
+            "cv_score_std": round(scores.std(), 4),
+            "cv_mae_percent": round(100 * (np.exp(mae_mean) - 1), 2)
         }
 
         cv_params = {

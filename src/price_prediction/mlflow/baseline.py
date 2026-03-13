@@ -11,13 +11,12 @@ def evaluate_baseline():
     mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
     mlflow.set_experiment("Baseline")
 
-    l2_reg = Ridge(random_state=config.RANDOM_STATE)
-    evaluate_model("Ridge", l2_reg)
+    params = { "random_state": config.RANDOM_STATE }
+    l2_reg = Ridge(**params)
+    evaluate_model("Ridge", l2_reg, params=params)
 
-    rf_reg = RandomForestRegressor(
-        n_jobs=-1, random_state=config.RANDOM_STATE
-    )
-    evaluate_model("RF", rf_reg)
+    rf_reg = RandomForestRegressor(**params)
+    evaluate_model("RF", rf_reg, params=params)
 
 
 if __name__ == "__main__":
