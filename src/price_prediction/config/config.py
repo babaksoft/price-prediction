@@ -29,11 +29,10 @@ NUM_FEATURES = ["Prod. year", "Cylinders", "Airbags"]
 CAT_FEATURES = [
     "Doors", "Drive wheels", "Gear box type",
     "Category", "Color", "Fuel type"
-]
+] # Low to medium cardinality
+HIGH_CAT_FEATURES = ["Manufacturer", "Model"] # High cardinality
 BIN_FEATURES = ["Leather interior", "Wheel"]
-ENC_FEATURES = [
-    "Levy", "Manufacturer", "Engine volume", "Mileage"
-] # Need custom encoding
+ENC_FEATURES = ["Levy", "Engine volume", "Mileage"] # Need custom encoding
 
 # Pipeline versioning config
 PIPELINE_STAGE = "preprocessing"

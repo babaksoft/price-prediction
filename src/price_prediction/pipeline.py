@@ -2,12 +2,12 @@ import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import TargetEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import (
-    OneHotEncoder, StandardScaler, FunctionTransformer)
+    OneHotEncoder, StandardScaler, RobustScaler, FunctionTransformer)
 
 from .config import config
-from .config.country import get_country_map
 
 
 def get_values(x):
@@ -16,16 +16,6 @@ def get_values(x):
     else:
         values = x.flatten()
     return values
-
-
-def manufacturer_transform(x):
-    country_map = get_country_map()
-    countries = []
-    for m in x:
-        key = m[0] if isinstance(m, (list, np.ndarray)) else m
-        country = country_map[key] if key in country_map else "Unknown"
-        countries.append(country)
-    return np.array(countries).reshape(-1, 1)
 
 
 def levy_transform(x):
@@ -72,6 +62,11 @@ def build_pipeline() -> ColumnTransformer:
             sparse_output=False
         ))
     ])
+    high_cat_pipeline = Pipeline([
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("encoder", TargetEncoder(target_type="continuous")),
+        ("scaler", RobustScaler())
+    ])
     num_pipeline = Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
         ("scaler", StandardScaler())
@@ -95,7 +90,7 @@ def build_pipeline() -> ColumnTransformer:
             func=np.log1p,
             feature_names_out="one-to-one"
         )),
-        ("scaler", StandardScaler())
+        ("scaler", RobustScaler())
     ])
     mileage_pipeline = Pipeline([
         ("transformer", FunctionTransformer(
@@ -107,15 +102,7 @@ def build_pipeline() -> ColumnTransformer:
             func=np.log1p,
             feature_names_out="one-to-one"
         )),
-        ("scaler", StandardScaler())
-    ])
-    manufacturer_pipeline = Pipeline([
-        ("imputer", SimpleImputer(strategy="most_frequent")),
-        ("mapper", FunctionTransformer(
-            func=manufacturer_transform,
-            feature_names_out="one-to-one"
-        )),
-        ("encoder", OneHotEncoder(handle_unknown="ignore"))
+        ("scaler", RobustScaler())
     ])
     engine_volume_num_pipeline = Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
@@ -136,7 +123,7 @@ def build_pipeline() -> ColumnTransformer:
         ("split", engine_volume_splitter),
         ("postprocess", ColumnTransformer(
             transformers=[
-                ("engine_volume", engine_volume_num_pipeline, [0]),
+                ("engine", engine_volume_num_pipeline, [0]),
                 ("turbo", turbo_pipeline, [1])
             ],
             remainder="drop")
@@ -144,13 +131,13 @@ def build_pipeline() -> ColumnTransformer:
     ])
 
     return ColumnTransformer([
-        ("categorical", cat_pipeline, config.CAT_FEATURES),
-        ("numerical", num_pipeline, config.NUM_FEATURES),
-        ("binary", bin_pipeline, config.BIN_FEATURES),
+        ("cat", cat_pipeline, config.CAT_FEATURES),
+        ("high_cat", high_cat_pipeline, config.HIGH_CAT_FEATURES),
+        ("num", num_pipeline, config.NUM_FEATURES),
+        ("bin", bin_pipeline, config.BIN_FEATURES),
         ("levy", levy_pipeline, ["Levy"]),
         ("mileage", mileage_pipeline, ["Mileage"]),
-        ("country", manufacturer_pipeline, ["Manufacturer"]),
-        ("engine_volume", engine_volume_pipeline, ["Engine volume"])
+        ("volume", engine_volume_pipeline, ["Engine volume"])
     ])
 
 
@@ -158,8 +145,9 @@ def pipeline_smoke_test():
     train_path = config.DATA_DIR / "prepared" / config.TRAIN_FILE
     df = pd.read_csv(train_path)
     x = df.drop(config.TARGET, axis=1)
+    y = df[config.TARGET]
     pipeline = build_pipeline()
-    _ = pipeline.fit_transform(x)
+    _ = pipeline.fit_transform(x, y)
     features = pipeline.get_feature_names_out()
     print(f"{len(features)} Output features :\n{features}")
 
