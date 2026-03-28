@@ -1,4 +1,5 @@
-import os, json
+import os
+import json
 
 import pandas as pd
 import mlflow
@@ -20,7 +21,7 @@ def set_version_tags():
         "mileage_transform": config.MILEAGE_TRANSFORM,
         "levy_transform": config.LEVY_TRANSFORM,
         "engine_volume_split": config.ENGINE_VOLUME_SPLIT,
-        "status": config.PIPELINE_STATUS
+        "status": config.PIPELINE_STATUS,
     }
     mlflow.set_tags(tags)
 
@@ -35,7 +36,7 @@ def set_version_params():
         "cleaned_size": len(df_train) + len(df_val) + len(df_test),
         "train_size": len(df_train),
         "val_size": len(df_val),
-        "test_size": len(df_test)
+        "test_size": len(df_test),
     }
     mlflow.log_params(params)
 
@@ -59,7 +60,7 @@ def set_version_artifacts(pipeline):
         json.dump(features, file)
     mlflow.log_artifact(path)
 
-    path = root_dir / f"pipeline_{config.PIPELINE_VERSION}.md" # Manually created
+    path = root_dir / f"pipeline_{config.PIPELINE_VERSION}.md"  # Manually created
     mlflow.log_artifact(path)
 
 

@@ -2,8 +2,7 @@ import mlflow
 import pandas as pd
 from xgboost import XGBRegressor
 from lightgbm import LGBMRegressor
-from sklearn.ensemble import (
-    RandomForestRegressor, HistGradientBoostingRegressor)
+from sklearn.ensemble import RandomForestRegressor, HistGradientBoostingRegressor
 from sklearn.neighbors import KNeighborsRegressor
 from tqdm import tqdm
 
@@ -20,14 +19,14 @@ def train_candidate_models():
         HistGradientBoostingRegressor(random_state=rs),
         XGBRegressor(random_state=rs),
         LGBMRegressor(random_state=rs),
-        KNeighborsRegressor()
+        KNeighborsRegressor(),
     ]
 
     mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
     experiment = mlflow.set_experiment("Model Shortlisting")
     for name, model in tqdm(zip(model_names, models)):
         print(f"\nEvaluating '{name}' model...")
-        params = { "random_state": rs } if name != "KNN" else None
+        params = {"random_state": rs} if name != "KNN" else None
         metrics = evaluate_model(name, model, params)
         agg_metrics.append(pd.Series(metrics, name=name))
 
@@ -37,8 +36,7 @@ def train_candidate_models():
     df_metrics.to_csv(path, index=False, header=True)
 
     with mlflow.start_run(
-        run_name="Performance",
-        experiment_id=experiment.experiment_id
+        run_name="Performance", experiment_id=experiment.experiment_id
     ) as run:
         mlflow.set_tag("run_id", run.info.run_id)
         mlflow.log_artifact(path)

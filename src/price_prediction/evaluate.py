@@ -10,12 +10,12 @@ def evaluate(model_path, data_path):
 
 
 def main():
-    data_path = Path(config.DATA_PATH) / "prepared" / config.TEST_FILE
+    data_path = Path(config.DATA_DIR) / "prepared" / config.TEST_FILE
     if not os.path.exists(data_path):
         raise FileNotFoundError(
             "Test dataset not found. Please run ingest.py before evaluating."
         )
-    model_path = Path(config.MODEL_PATH) / "model.joblib"
+    model_path = Path(config.MODEL_DIR) / "model.joblib"
     if not os.path.exists(model_path):
         raise FileNotFoundError(
             "Trained model not found. Please run train.py before evaluating."

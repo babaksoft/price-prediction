@@ -16,8 +16,8 @@ def fix_duplicates(df: pd.DataFrame) -> pd.DataFrame:
         metrics = {
             "raw_size": len(df),
             "duplicate_count": dup_count,
-            "duplicate_percent": round(100. * dup_count / len(df), 2),
-            "cleaned_size": len(df) - dup_count
+            "duplicate_percent": round(100.0 * dup_count / len(df), 2),
+            "cleaned_size": len(df) - dup_count,
         }
         mlflow.log_metrics(metrics)
         mlflow.end_run()
@@ -39,8 +39,8 @@ def fix_target_noise(df: pd.DataFrame) -> pd.DataFrame:
             "min_target_value": min_price,
             "raw_size": len(df),
             "noisy_target_count": noise_count,
-            "noisy_target_percent": round(100. * noise_count / len(df), 2),
-            "cleaned_size": len(df_clean)
+            "noisy_target_percent": round(100.0 * noise_count / len(df), 2),
+            "cleaned_size": len(df_clean),
         }
         mlflow.log_metrics(metrics)
         mlflow.end_run()
@@ -71,8 +71,8 @@ def fix_target_conflict(data: pd.DataFrame) -> pd.DataFrame:
         metrics = {
             "raw_size": len(data),
             "conflict_target_count": conflict_count,
-            "conflict_target_percent": round(100. * conflict_count / len(data), 2),
-            "cleaned_size": len(df_clean)
+            "conflict_target_percent": round(100.0 * conflict_count / len(data), 2),
+            "cleaned_size": len(df_clean),
         }
         mlflow.log_metrics(metrics)
         mlflow.end_run()
@@ -109,17 +109,25 @@ def ingest(raw_path, to_dir):
     df[bin_label] = pd.cut(
         df[config.TARGET],
         bins=[
-            0, percentiles[0], percentiles[1],
-            percentiles[2], percentiles[3], np.inf
+            0,
+            percentiles[0],
+            percentiles[1],
+            percentiles[2],
+            percentiles[3],
+            np.inf,
         ],
-        labels=[1, 2, 3, 4, 5])
+        labels=[1, 2, 3, 4, 5],
+    )
 
     df_train, df_test = train_test_split(
-        df, test_size=config.TRAIN_TEST_SPLIT,
-        stratify=df[bin_label], random_state=rs)
+        df, test_size=config.TRAIN_TEST_SPLIT, stratify=df[bin_label], random_state=rs
+    )
     df_train, df_val = train_test_split(
-        df_train, test_size=config.TRAIN_VAL_SPLIT,
-        stratify=df_train[bin_label], random_state=rs)
+        df_train,
+        test_size=config.TRAIN_VAL_SPLIT,
+        stratify=df_train[bin_label],
+        random_state=rs,
+    )
 
     df_train = df_train.drop([bin_label], axis=1)
     df_val = df_val.drop([bin_label], axis=1)
@@ -138,7 +146,7 @@ def ingest(raw_path, to_dir):
             "train_size": len(df_train),
             "val_size": len(df_val),
             "test_size": len(df_test),
-            "random_state": config.RANDOM_STATE
+            "random_state": config.RANDOM_STATE,
         }
         mlflow.log_metrics(split_params)
         mlflow.end_run()
@@ -154,9 +162,11 @@ def main():
     to_dir = Path(config.DATA_DIR) / "prepared"
     if not os.path.exists(to_dir):
         os.mkdir(to_dir)
-    if os.path.exists(to_dir / config.TRAIN_FILE) or \
-        os.path.exists(to_dir / config.VAL_FILE) or \
-        os.path.exists(to_dir / config.TEST_FILE):
+    if (
+        os.path.exists(to_dir / config.TRAIN_FILE)
+        or os.path.exists(to_dir / config.VAL_FILE)
+        or os.path.exists(to_dir / config.TEST_FILE)
+    ):
         print("[INFO] Dataset is already ingested.")
         return
 
@@ -164,5 +174,5 @@ def main():
     print("[INFO] Raw dataset successfully ingested.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,4 +1,3 @@
-
 import mlflow
 from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor
@@ -11,7 +10,7 @@ def evaluate_baseline():
     mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
     mlflow.set_experiment("Baseline")
 
-    params = { "random_state": config.RANDOM_STATE }
+    params = {"random_state": config.RANDOM_STATE}
     l2_reg = Ridge(**params)
     evaluate_model("Ridge", l2_reg, params=params)
 

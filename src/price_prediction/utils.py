@@ -17,7 +17,7 @@ def get_data(split_name: str = "train"):
     files = {
         "train": config.TRAIN_FILE,
         "validation": config.VAL_FILE,
-        "test": config.TEST_FILE
+        "test": config.TEST_FILE,
     }
     name = split_name.lower()
     if name in files:
@@ -27,8 +27,7 @@ def get_data(split_name: str = "train"):
 
     path = Path(config.DATA_DIR) / "prepared" / file
     if not os.path.exists(path):
-        raise FileNotFoundError(
-            "Dataset not found. Please run ingest.py first.")
+        raise FileNotFoundError("Dataset not found. Please run ingest.py first.")
 
     df = pd.read_csv(path)
     x = df.drop(config.TARGET, axis=1)
@@ -41,53 +40,37 @@ def evaluate_model(run_name, model, params: dict[str, Any] = None):
         mlflow.set_tag("run_id", run.info.run_id)
 
         transformer = build_pipeline()
-        pipeline = Pipeline([
-            ("transformer", transformer),
-            ("estimator", model)
-        ])
+        pipeline = Pipeline([("transformer", transformer), ("estimator", model)])
 
         x, y = get_data()
-        cv = KFold(
-            n_splits=10, shuffle=True,
-            random_state=config.RANDOM_STATE
-        )
+        cv = KFold(n_splits=10, shuffle=True, random_state=config.RANDOM_STATE)
 
         start = datetime.now()
         scoring = "neg_mean_absolute_error"
-        scores = -cross_val_score(
-            pipeline, x, y, scoring=scoring, cv=cv, n_jobs=-1)
+        scores = -cross_val_score(pipeline, x, y, scoring=scoring, cv=cv, n_jobs=-1)
         end = datetime.now()
 
         mae_mean = scores.mean()
         metrics = {
             "cv_score_mean": round(mae_mean, 4),
             "cv_score_std": round(scores.std(), 4),
-            "cv_mae_percent": round(100 * (np.exp(mae_mean) - 1), 2)
+            "cv_mae_percent": round(100 * (np.exp(mae_mean) - 1), 2),
         }
 
-        cv_params = {
-            "model_type": type(model).__name__
-        }
+        cv_params = {"model_type": type(model).__name__}
         if params:
-            cv_params.update({
-                f"model_{key}": value for key, value in params.items()
-            })
-        cv_params.update({
-            "cv_scoring": scoring,
-            "cv_splits": 10,
-            "cv_shuffle": True,
-            "cv_random_state": config.RANDOM_STATE,
-            "cv_duration": str(end - start)
-        })
+            cv_params.update({f"model_{key}": value for key, value in params.items()})
+        cv_params.update(
+            {
+                "cv_scoring": scoring,
+                "cv_splits": 10,
+                "cv_shuffle": True,
+                "cv_random_state": config.RANDOM_STATE,
+                "cv_duration": str(end - start),
+            }
+        )
 
         mlflow.log_metrics(metrics)
         mlflow.log_params(cv_params)
         mlflow.end_run()
         return metrics
-
-
-def feature_target_split(csv_path):
-    data = pd.read_csv(csv_path)
-    x = data.drop(config.TARGET, axis=1)
-    y = data[config.TARGET]
-    return x,y
