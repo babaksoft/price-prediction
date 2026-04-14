@@ -2,3 +2,5 @@
     remote = local_storage
 ['remote "local_storage"']
     url = ../../_cpp_dvc_
+['remote "aws_storage"']
+    url = s3://babaksoft/ml-portfolio/price-prediction/dvc_sync
